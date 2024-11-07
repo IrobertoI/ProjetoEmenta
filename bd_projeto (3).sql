@@ -1,0 +1,254 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Tempo de geração: 07/11/2024 às 20:33
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Banco de dados: `bd_projeto`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `alunos`
+--
+
+CREATE TABLE `alunos` (
+  `id_aluno` int(11) NOT NULL,
+  `nome_aluno` varchar(255) NOT NULL,
+  `curso_origem` varchar(255) DEFAULT NULL,
+  `id_curso` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `anexos`
+--
+
+CREATE TABLE `anexos` (
+  `id_anexo` int(11) NOT NULL,
+  `id_aluno` int(11) DEFAULT NULL,
+  `nome_arquivo` varchar(255) NOT NULL,
+  `caminho_arquivo` varchar(255) NOT NULL,
+  `data_upload` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `bibliografia`
+--
+
+CREATE TABLE `bibliografia` (
+  `id_bibliografia` int(11) NOT NULL,
+  `tipo` enum('Básica','Complementar') NOT NULL,
+  `referencia` text NOT NULL,
+  `id_disciplina` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `cursos`
+--
+
+CREATE TABLE `cursos` (
+  `id_curso` int(11) NOT NULL,
+  `nome_curso` varchar(255) NOT NULL,
+  `duracao_periodos` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `curso_disciplina`
+--
+
+CREATE TABLE `curso_disciplina` (
+  `id_curso` int(11) NOT NULL,
+  `id_disciplina` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `disciplinas`
+--
+
+CREATE TABLE `disciplinas` (
+  `id_disciplina` int(11) NOT NULL,
+  `nome_disciplina` varchar(255) NOT NULL,
+  `ementa` text NOT NULL DEFAULT current_timestamp(),
+  `carga_horaria` int(11) DEFAULT NULL,
+  `id_curso` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `historico_alunos`
+--
+
+CREATE TABLE `historico_alunos` (
+  `id_historico` int(11) NOT NULL,
+  `id_aluno` int(11) DEFAULT NULL,
+  `id_disciplina` int(11) DEFAULT NULL,
+  `nota` decimal(5,2) DEFAULT NULL,
+  `carga_horaria_cursada` int(11) DEFAULT NULL,
+  `status` enum('Aprovado','Reprovado','Em Andamento') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices de tabela `alunos`
+--
+ALTER TABLE `alunos`
+  ADD PRIMARY KEY (`id_aluno`),
+  ADD KEY `id_curso` (`id_curso`);
+
+--
+-- Índices de tabela `anexos`
+--
+ALTER TABLE `anexos`
+  ADD PRIMARY KEY (`id_anexo`),
+  ADD KEY `id_aluno` (`id_aluno`);
+
+--
+-- Índices de tabela `bibliografia`
+--
+ALTER TABLE `bibliografia`
+  ADD PRIMARY KEY (`id_bibliografia`),
+  ADD KEY `id_disciplina` (`id_disciplina`);
+
+--
+-- Índices de tabela `cursos`
+--
+ALTER TABLE `cursos`
+  ADD PRIMARY KEY (`id_curso`);
+
+--
+-- Índices de tabela `curso_disciplina`
+--
+ALTER TABLE `curso_disciplina`
+  ADD PRIMARY KEY (`id_curso`,`id_disciplina`),
+  ADD KEY `fk_disciplina` (`id_disciplina`);
+
+--
+-- Índices de tabela `disciplinas`
+--
+ALTER TABLE `disciplinas`
+  ADD PRIMARY KEY (`id_disciplina`),
+  ADD KEY `id_curso` (`id_curso`);
+
+--
+-- Índices de tabela `historico_alunos`
+--
+ALTER TABLE `historico_alunos`
+  ADD PRIMARY KEY (`id_historico`),
+  ADD KEY `id_aluno` (`id_aluno`),
+  ADD KEY `id_disciplina` (`id_disciplina`);
+
+--
+-- AUTO_INCREMENT para tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `alunos`
+--
+ALTER TABLE `alunos`
+  MODIFY `id_aluno` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `anexos`
+--
+ALTER TABLE `anexos`
+  MODIFY `id_anexo` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `bibliografia`
+--
+ALTER TABLE `bibliografia`
+  MODIFY `id_bibliografia` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `cursos`
+--
+ALTER TABLE `cursos`
+  MODIFY `id_curso` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `disciplinas`
+--
+ALTER TABLE `disciplinas`
+  MODIFY `id_disciplina` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `historico_alunos`
+--
+ALTER TABLE `historico_alunos`
+  MODIFY `id_historico` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restrições para tabelas despejadas
+--
+
+--
+-- Restrições para tabelas `alunos`
+--
+ALTER TABLE `alunos`
+  ADD CONSTRAINT `alunos_ibfk_1` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `anexos`
+--
+ALTER TABLE `anexos`
+  ADD CONSTRAINT `anexos_ibfk_1` FOREIGN KEY (`id_aluno`) REFERENCES `alunos` (`id_aluno`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `bibliografia`
+--
+ALTER TABLE `bibliografia`
+  ADD CONSTRAINT `bibliografia_ibfk_1` FOREIGN KEY (`id_disciplina`) REFERENCES `disciplinas` (`id_disciplina`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `curso_disciplina`
+--
+ALTER TABLE `curso_disciplina`
+  ADD CONSTRAINT `fk_curso` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_disciplina` FOREIGN KEY (`id_disciplina`) REFERENCES `disciplinas` (`id_disciplina`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `disciplinas`
+--
+ALTER TABLE `disciplinas`
+  ADD CONSTRAINT `disciplinas_ibfk_1` FOREIGN KEY (`id_curso`) REFERENCES `cursos` (`id_curso`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `historico_alunos`
+--
+ALTER TABLE `historico_alunos`
+  ADD CONSTRAINT `historico_alunos_ibfk_1` FOREIGN KEY (`id_aluno`) REFERENCES `alunos` (`id_aluno`) ON DELETE CASCADE,
+  ADD CONSTRAINT `historico_alunos_ibfk_2` FOREIGN KEY (`id_disciplina`) REFERENCES `disciplinas` (`id_disciplina`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
