@@ -129,8 +129,10 @@ Este banco de dados foi projetado com foco em flexibilidade e integridade refere
 - **Data**: 2024
 - **Licença**: MIT license.
 
-Front-End do Sistema
-Introdução
+# Front-End do Sistema
+
+#Introdução 
+
 O sistema de aproveitamento de ementas desenvolvido para o Centro Universitário Unialfa é uma aplicação web que permite aos alunos fazer o upload de ementas acadêmicas, avaliar o aproveitamento das disciplinas e exibir o resultado do processamento. O front-end da aplicação foi projetado para ser simples, eficiente e responsivo, utilizando tecnologias amplamente adotadas para o desenvolvimento de aplicações web modernas.
 
 Este documento descreve de forma detalhada as tecnologias utilizadas, a estrutura do código e os principais componentes envolvidos no front-end do sistema.
