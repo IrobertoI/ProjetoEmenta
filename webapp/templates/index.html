@@ -1,37 +1,43 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Faculdade</title>
-    <link rel="stylesheet" href="style.css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+
     <header>
         <div class="logo">
-            <img src="unialfa-aulao-enem-202022222.jpg" alt="Logo da Faculdade" id="logo">
+            <img src="{% static 'imagens/simbolo_unialfa.jpg' %}" alt="Logo da Faculdade" id="logo">
         </div>
         <h1>Centro Universitário Unialfa</h1>
         <button id="theme-toggle">Tema Escuro</button>
-        
     </header>
-    
+    <br>
+    <br>
     <div class="matricula">
-            <h2>Insira sua matrícula</h2>
-            <label for="caixaTexto"></label>
-            <input type="text" id="caixaTexto" placeholder="Escreva aqui">
-            <button onclick="mostrarTexto()">Enviar</button>
-            <h2 class="introducao">Avalie abaixo o seu aproveitamento de ementa, avaliando em qual período você irá ingressar e qual a porcentagem de aproveitamento.</h2>
-            
-        </div>
+        <label for="caixaTexto"></label>
+        <h2 class="introducao">
+            Avalie abaixo o seu aproveitamento de ementa,<br>
+            avaliando em qual período você irá ingressar e qual a porcentagem de aproveitamento.
+        </h2>
+    </div>
 
     <main>
         <section class="upload-pdf">
             <h2>Insira aqui o sua ementa para aproveitamento</h2>
-            <input type="file" accept="application/pdf">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="fileInput" name="file" accept="application/pdf">
+                <button type="submit">Enviar</button>
+            </form>
+            <div id="response"></div>
         </section>
     </main>
 
-    <script src="script.js/script.js"></script>
+    <script src="{% static 'javascript/script.js' %}"></script>
 </body>
 </html>
