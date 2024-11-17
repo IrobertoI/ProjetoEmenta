@@ -129,7 +129,11 @@ Este banco de dados foi projetado com foco em flexibilidade e integridade refere
 - **Data**: 2024
 - **Licença**: MIT license.
 
+---
+
 # Front-End do Sistema
+
+---
 
 ## Introdução 
 
@@ -153,7 +157,7 @@ do uso do HTML no sistema são:
 
 **Estruturação de Formulários:**
 
-Utilizamos um formulário para o envio de arquivos PDF, permitindo
+- Utilizamos um formulário para o envio de arquivos PDF, permitindo
 que o aluno envie a sua ementa para ser processada pelo sistema.
 Exibição de Resultados: Os resultados do processamento, como o período do aluno e as disciplinas
 com suas porcentagens de aproveitamento, são exibidos dinamicamente utilizando elementos HTML como
@@ -176,19 +180,19 @@ dinamicamente com o uso de classes CSS.
 
  **JavaScript**
  
-O JavaScript é a linguagem de programação utilizada para dar interatividade ao sistema. Ele é responsável
+- O JavaScript é a linguagem de programação utilizada para dar interatividade ao sistema. Ele é responsável
 por controlar o comportamento da página, como o envio de dados para o backend e a exibição dos resultados. 
 Abaixo estão as principais funcionalidades implementadas com JavaScript:
 
-# Envio de Arquivo para o Backend
-A funcionalidade de envio de arquivos é implementada utilizando a API FormData do JavaScript. Quando o 
-usuário clica no botão "Enviar", o arquivo PDF é enviado ao servidor através de uma requisição POST utilizando
+- Envio de Arquivo para o Backend. A funcionalidade de envio de arquivos é implementada utilizando a API FormData
+ do JavaScript. Quando o usuário clica no botão "Enviar", o arquivo PDF é enviado ao servidor através de uma requisição POST utilizando
 a API fetch. O backend, ao processar o arquivo, retorna uma resposta contendo informações sobre o período e as 
 disciplinas, que são então exibidas na página.
 
-# Criação do Formulário de Envio: O arquivo selecionado pelo usuário é anexado a um objeto FormData, que é enviado
+- Criação do Formulário de Envio: O arquivo selecionado pelo usuário é anexado a um objeto FormData, que é enviado
 ao backend.
-**Tratamento da Resposta do Backend:** A resposta do servidor, que é no formato JSON, contém as informações do período
+
+- Tratamento da Resposta do Backend: A resposta do servidor, que é no formato JSON, contém as informações do período
 e das disciplinas. Essas informações são exibidas dinamicamente na página.
 Alternância entre Tema Claro e Escuro.
 A alternância entre tema claro e escuro foi implementada utilizando a manipulação de classes CSS através do 
@@ -236,13 +240,13 @@ método POST para o envio de arquivos e o método GET ou POST para a recuperaç�
 O sistema de aproveitamento de ementas foi desenvolvido utilizando tecnologias modernas e amplamente adotadas, como HTML, 
 CSS e JavaScript. O front-end é responsável por fornecer uma interface intuitiva para o aluno, permitindo o envio de 
 arquivos e a visualização dos resultados de maneira simples e eficiente.
-
----
-
 A interação com o backend foi cuidadosamente planejada, garantindo que a comunicação entre o front-end e o back-end 
 ocorra de forma fluida e que as informações retornadas sejam exibidas adequadamente.
+Com a implementação do tema escuro e da manipulação dinâmica de dados, o sistema proporciona uma experiência 
+agradável e interativa para os usuários.
 
 ---
 
-Com a implementação do tema escuro e da manipulação dinâmica de dados, o sistema proporciona uma experiência 
-agradável e interativa para os usuários.
+- **Autor**: Cláudio Roberto de Menezes Junior.
+- **Data**: 2024
+- **Licença**: MIT license.
