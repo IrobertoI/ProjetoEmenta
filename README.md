@@ -131,61 +131,118 @@ Este banco de dados foi projetado com foco em flexibilidade e integridade refere
 
 # Front-End do Sistema
 
-#Introdução 
+## Introdução 
 
-O sistema de aproveitamento de ementas desenvolvido para o Centro Universitário Unialfa é uma aplicação web que permite aos alunos fazer o upload de ementas acadêmicas, avaliar o aproveitamento das disciplinas e exibir o resultado do processamento. O front-end da aplicação foi projetado para ser simples, eficiente e responsivo, utilizando tecnologias amplamente adotadas para o desenvolvimento de aplicações web modernas.
+O sistema de aproveitamento de ementas desenvolvido para o Centro Universitário Unialfa
+é uma aplicação web que permite aos alunos fazer o upload de ementas acadêmicas, avaliar
+o aproveitamento das disciplinas e exibir o resultado do processamento. O front-end da 
+aplicação foi projetado para ser simples, eficiente e responsivo, utilizando tecnologias
+amplamente adotadas para o desenvolvimento de aplicações web modernas.
 
-Este documento descreve de forma detalhada as tecnologias utilizadas, a estrutura do código e os principais componentes envolvidos no front-end do sistema.
+Este documento descreve de forma detalhada as tecnologias utilizadas, a estrutura do código
+e os principais componentes envolvidos no front-end do sistema.
 
-Tecnologias Utilizadas
-HTML (HyperText Markup Language)
-O HTML é a principal linguagem de marcação utilizada para estruturar o conteúdo da página web. No caso deste sistema, ele é responsável por definir a estrutura dos elementos da página, como cabeçalhos, formulários, botões e a exibição dos resultados. As principais características do uso do HTML no sistema são:
+### Tecnologias Utilizadas
 
-Estruturação de Formulários: Utilizamos um formulário para o envio de arquivos PDF, permitindo que o aluno envie a sua ementa para ser processada pelo sistema.
-Exibição de Resultados: Os resultados do processamento, como o período do aluno e as disciplinas com suas porcentagens de aproveitamento, são exibidos dinamicamente utilizando elementos HTML como listas e parágrafos.
-Referências Estáticas: A página faz uso de arquivos estáticos (CSS, imagens e JavaScript) que são carregados pelo Django, usando o recurso {% static %}.
-CSS (Cascading Style Sheets)
+**HTML (HyperText Markup Language)**
+
+O HTML é a principal linguagem de marcação utilizada para estruturar o conteúdo da página web.
+No caso deste sistema, ele é responsável por definir a estrutura dos elementos da página, 
+como cabeçalhos, formulários, botões e a exibição dos resultados. As principais características
+do uso do HTML no sistema são:
+
+**Estruturação de Formulários:**
+
+Utilizamos um formulário para o envio de arquivos PDF, permitindo
+que o aluno envie a sua ementa para ser processada pelo sistema.
+Exibição de Resultados: Os resultados do processamento, como o período do aluno e as disciplinas
+com suas porcentagens de aproveitamento, são exibidos dinamicamente utilizando elementos HTML como
+listas e parágrafos.
+Referências Estáticas: A página faz uso de arquivos estáticos (CSS, imagens e JavaScript) que são
+carregados pelo Django, usando o recurso {% static %}.
+
+**CSS (Cascading Style Sheets)**
+
 O CSS é utilizado para definir a aparência e o layout da página. No sistema, o CSS foi empregado para:
 
-Design Responsivo: A página foi desenvolvida para ser responsiva, ou seja, ela se adapta a diferentes tamanhos de tela, proporcionando uma boa experiência de usuário em dispositivos móveis e desktops.
-Estilização do Tema Claro e Escuro: Foi implementada a funcionalidade de alternância entre tema claro e tema escuro, permitindo ao usuário escolher a aparência da página.
-Estilização de Elementos de Interação: Botões, campos de input e outras interações foram estilizados para garantir uma aparência moderna e atraente.
-O arquivo de estilo é carregado a partir da pasta estática do Django, e a mudança de tema é feita dinamicamente com o uso de classes CSS.
+- Design Responsivo: A página foi desenvolvida para ser responsiva, ou seja, ela se adapta a diferentes
+tamanhos de tela, proporcionando uma boa experiência de usuário em dispositivos móveis e desktops.
+Estilização do Tema Claro e Escuro: Foi implementada a funcionalidade de alternância entre tema claro
+e tema escuro, permitindo ao usuário escolher a aparência da página.
+Estilização de Elementos de Interação: Botões, campos de input e outras interações foram estilizados
+para garantir uma aparência moderna e atraente.
+O arquivo de estilo é carregado a partir da pasta estática do Django, e a mudança de tema é feita 
+dinamicamente com o uso de classes CSS.
 
-JavaScript
-O JavaScript é a linguagem de programação utilizada para dar interatividade ao sistema. Ele é responsável por controlar o comportamento da página, como o envio de dados para o backend e a exibição dos resultados. Abaixo estão as principais funcionalidades implementadas com JavaScript:
+ **JavaScript**
+ 
+O JavaScript é a linguagem de programação utilizada para dar interatividade ao sistema. Ele é responsável
+por controlar o comportamento da página, como o envio de dados para o backend e a exibição dos resultados. 
+Abaixo estão as principais funcionalidades implementadas com JavaScript:
 
-Envio de Arquivo para o Backend
-A funcionalidade de envio de arquivos é implementada utilizando a API FormData do JavaScript. Quando o usuário clica no botão "Enviar", o arquivo PDF é enviado ao servidor através de uma requisição POST utilizando a API fetch. O backend, ao processar o arquivo, retorna uma resposta contendo informações sobre o período e as disciplinas, que são então exibidas na página.
+# Envio de Arquivo para o Backend
+A funcionalidade de envio de arquivos é implementada utilizando a API FormData do JavaScript. Quando o 
+usuário clica no botão "Enviar", o arquivo PDF é enviado ao servidor através de uma requisição POST utilizando
+a API fetch. O backend, ao processar o arquivo, retorna uma resposta contendo informações sobre o período e as 
+disciplinas, que são então exibidas na página.
 
-Criação do Formulário de Envio: O arquivo selecionado pelo usuário é anexado a um objeto FormData, que é enviado ao backend.
-Tratamento da Resposta do Backend: A resposta do servidor, que é no formato JSON, contém as informações do período e das disciplinas. Essas informações são exibidas dinamicamente na página.
-Alternância entre Tema Claro e Escuro
-A alternância entre tema claro e escuro foi implementada utilizando a manipulação de classes CSS através do JavaScript. Ao clicar no botão de alternância, o JavaScript adiciona ou remove a classe dark-mode do corpo da página, do cabeçalho e do botão, alterando a aparência de acordo com o tema selecionado.
+# Criação do Formulário de Envio: O arquivo selecionado pelo usuário é anexado a um objeto FormData, que é enviado
+ao backend.
+**Tratamento da Resposta do Backend:** A resposta do servidor, que é no formato JSON, contém as informações do período
+e das disciplinas. Essas informações são exibidas dinamicamente na página.
+Alternância entre Tema Claro e Escuro.
+A alternância entre tema claro e escuro foi implementada utilizando a manipulação de classes CSS através do 
+JavaScript. Ao clicar no botão de alternância, o JavaScript adiciona ou remove a classe dark-mode do corpo da 
+página, do cabeçalho e do botão, alterando a aparência de acordo com o tema selecionado.
 
-Exibição de Resultados
-Os resultados são exibidos dinamicamente utilizando a manipulação de elementos HTML com JavaScript. Quando o backend envia os dados das disciplinas e do período, o JavaScript atualiza o conteúdo das seções da página, como:
+---
 
-Exibindo o período em um parágrafo.
+**Exibição de Resultados**
+
+Os resultados são exibidos dinamicamente utilizando a manipulação de elementos HTML com JavaScript. Quando o 
+backend envia os dados das disciplinas e do período, o JavaScript atualiza o conteúdo das seções da página, como:
+
+**Exibindo o período em um parágrafo.**
+
 Exibindo as disciplinas e seus aproveitamentos em uma lista.
 Esses dados são extraídos da resposta JSON do backend e inseridos na estrutura HTML da página.
 
-Integração com o Backend (Django)
-A integração com o backend é feita através de requisições HTTP, utilizando a API fetch para enviar e receber dados do servidor. O front-end comunica-se com o backend por meio da URL configurada, que recebe a requisição de upload do arquivo e retorna os dados necessários para o processamento.
+---
 
-O backend, implementado em Django, é responsável por processar o arquivo PDF enviado, calcular o aproveitamento das disciplinas e retornar os dados necessários, como o período do aluno e a lista de disciplinas com suas porcentagens de aproveitamento.
+**Integração com o Backend (Django)**
 
-A comunicação entre front-end e back-end segue o padrão RESTful, onde as requisições são feitas utilizando o método POST para o envio de arquivos e o método GET ou POST para a recuperação de dados processados.
+A integração com o backend é feita através de requisições HTTP, utilizando a API fetch para enviar e receber 
+dados do servidor. O front-end comunica-se com o backend por meio da URL configurada, que recebe a requisição 
+de upload do arquivo e retorna os dados necessários para o processamento.
+O backend, implementado em Django, é responsável por processar o arquivo PDF enviado, calcular o aproveitamento 
+das disciplinas e retornar os dados necessários, como o período do aluno e a lista de disciplinas com suas 
+porcentagens de aproveitamento.
 
-Fluxo de Funcionamento
-Envio de Arquivo: O aluno seleciona um arquivo PDF e clica no botão "Enviar".
-Requisição ao Backend: O JavaScript coleta o arquivo selecionado e envia para o backend via fetch (requisição POST).
-Processamento no Backend: O backend processa o arquivo e calcula as disciplinas e o aproveitamento.
-Resposta do Backend: O backend envia os dados do processamento (período, disciplinas e aproveitamento) em formato JSON.
-Exibição dos Resultados: O JavaScript recebe os dados e exibe-os dinamicamente na página.
-Conclusão
-O sistema de aproveitamento de ementas foi desenvolvido utilizando tecnologias modernas e amplamente adotadas, como HTML, CSS e JavaScript. O front-end é responsável por fornecer uma interface intuitiva para o aluno, permitindo o envio de arquivos e a visualização dos resultados de maneira simples e eficiente.
+A comunicação entre front-end e back-end segue o padrão RESTful, onde as requisições são feitas utilizando o 
+método POST para o envio de arquivos e o método GET ou POST para a recuperação de dados processados.
 
-A interação com o backend foi cuidadosamente planejada, garantindo que a comunicação entre o front-end e o back-end ocorra de forma fluida e que as informações retornadas sejam exibidas adequadamente.
+---
 
-Com a implementação do tema escuro e da manipulação dinâmica de dados, o sistema proporciona uma experiência agradável e interativa para os usuários.
+# Fluxo de Funcionamento
+
+- **Envio de Arquivo:** O aluno seleciona um arquivo PDF e clica no botão "Enviar".
+- **Requisição ao Backend:** O JavaScript coleta o arquivo selecionado e envia para o backend via fetch (requisição POST).
+- **Processamento no Backend:** O backend processa o arquivo e calcula as disciplinas e o aproveitamento.
+- **Resposta do Backend:** O backend envia os dados do processamento (período, disciplinas e aproveitamento) em formato JSON.
+- **Exibição dos Resultados:** O JavaScript recebe os dados e exibe-os dinamicamente na página.
+
+# Conclusão
+
+O sistema de aproveitamento de ementas foi desenvolvido utilizando tecnologias modernas e amplamente adotadas, como HTML, 
+CSS e JavaScript. O front-end é responsável por fornecer uma interface intuitiva para o aluno, permitindo o envio de 
+arquivos e a visualização dos resultados de maneira simples e eficiente.
+
+---
+
+A interação com o backend foi cuidadosamente planejada, garantindo que a comunicação entre o front-end e o back-end 
+ocorra de forma fluida e que as informações retornadas sejam exibidas adequadamente.
+
+---
+
+Com a implementação do tema escuro e da manipulação dinâmica de dados, o sistema proporciona uma experiência 
+agradável e interativa para os usuários.
