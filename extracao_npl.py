@@ -34,10 +34,18 @@ def comparar_ementa(texto_ementa: str, cursor) -> List[Tuple[str, int]]:
     cursor.execute("SELECT codigo, texto FROM ementas")
     ementas_db = cursor.fetchall()
     resultados = []
+    
     for codigo, texto_banco in ementas_db:
+        # Compara a similaridade entre o texto extraído do PDF e o texto do banco de dados
         similaridade = fuzz.ratio(texto_ementa, texto_banco)
-        resultados.append((codigo, similaridade))  # Ordenar os resultados por similaridade em ordem decrescente
+        
+        # Adiciona apenas ementas com similaridade >= 70
+        if similaridade >= 70:
+            resultados.append((codigo, similaridade))
+    
+    # Ordena os resultados por similaridade, de maior para menor
     resultados_ordenados = sorted(resultados, key=lambda x: x[1], reverse=True)
+    
     return resultados_ordenados
 
 # Função principal para processar o PDF e comparar com a base de dados
@@ -45,11 +53,18 @@ def processar_pdf(caminho_pdf: str, cursor, conn):
     texto_ementa = extrair_texto_pdf(caminho_pdf)
     print("Comparando a ementa extraída com as ementas na base de dados...\n")
     resultados = comparar_ementa(texto_ementa, cursor)
-    # Exibir os resultados das comparações de similaridade
-    for codigo, similaridade in resultados:
-        print(f"Código: {codigo}, Similaridade: {similaridade}%")
+    
+    # Se não houver resultados com similaridade >= 70%, informar ao usuário
+    if not resultados:
+        print("Nenhuma ementa com similaridade suficiente (>= 70%) encontrada.")
+    else:
+        # Exibir os resultados das comparações de similaridade
+        for codigo, similaridade in resultados:
+            print(f"Código: {codigo}, Similaridade: {similaridade}%")
+    
     # Opcional: armazenar a ementa no banco de dados após extraí-la
     inserir_ementa("NOVA_EMENTA", texto_ementa, cursor, conn)
+
 
 # Executar o pipeline completo
 def main():
