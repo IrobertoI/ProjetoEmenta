@@ -1,8 +1,31 @@
 # Importações necessárias
 import fitz  # PyMuPDF para extração de texto do PDF
-import sqlite3  # Biblioteca para interação com banco de dados SQLite
 from fuzzywuzzy import fuzz  # Biblioteca para comparação de similaridade de strings
 from typing import List, Tuple  # Tipos de dados para anotações de tipos
+import mysql.connector  # Biblioteca para conexão com o MySQL
+from mysql.connector import Error  # Importando classe de erro para captura de exceções
+
+# Função para conectar ao banco de dados MySQL
+def conectar_bd_mysql(host: str, usuario: str, senha: str, db_name: str):
+    try:
+        # Estabelecendo a conexão com o banco de dados MySQL
+        conn = mysql.connector.connect(
+            host=host,
+            user=usuario,
+            password=senha,
+            database=db_name
+        )
+        if conn.is_connected():
+            print("Conexão bem-sucedida com o banco de dados MySQL!")
+            cursor = conn.cursor()
+            return conn, cursor
+    except Error as e:
+        print(f"Erro ao conectar ao MySQL: {e}")
+        return None, None
+
+
+
+
 
 # Função para extrair texto de um PDF
 def extrair_texto_pdf(caminho_pdf: str) -> str:
@@ -13,40 +36,26 @@ def extrair_texto_pdf(caminho_pdf: str) -> str:
     return texto_completo
 
 # Função para conectar ao banco de dados SQLite e criar a tabela
-def conectar_bd(caminho_bd: str = "ementas.db"):
-    conn = sqlite3.connect(caminho_bd)
-    cursor = conn.cursor()
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS ementas (
-        codigo TEXT PRIMARY KEY,
-        texto TEXT
-    )''')
-    conn.commit()
-    return conn, cursor
 
-# Função para inserir uma ementa no banco de dados
+
+
+    # Função para inserir uma ementa no banco de dados MySQL
 def inserir_ementa(codigo: str, texto: str, cursor, conn):
-    cursor.execute("INSERT OR REPLACE INTO ementas (codigo, texto) VALUES (?, ?)", (codigo, texto))
+    cursor.execute("INSERT INTO ementas (codigo, texto) VALUES (%s, %s) ON DUPLICATE KEY UPDATE texto=%s", (codigo, texto, texto))
     conn.commit()
+
 
 # Função para buscar ementas no banco de dados e comparar similaridade
 def comparar_ementa(texto_ementa: str, cursor) -> List[Tuple[str, int]]:
     cursor.execute("SELECT codigo, texto FROM ementas")
     ementas_db = cursor.fetchall()
     resultados = []
-    
     for codigo, texto_banco in ementas_db:
-        # Compara a similaridade entre o texto extraído do PDF e o texto do banco de dados
         similaridade = fuzz.ratio(texto_ementa, texto_banco)
-        
-        # Adiciona apenas ementas com similaridade >= 70
-        if similaridade >= 70:
-            resultados.append((codigo, similaridade))
-    
-    # Ordena os resultados por similaridade, de maior para menor
+        resultados.append((codigo, similaridade))  # Ordenar os resultados por similaridade em ordem decrescente
     resultados_ordenados = sorted(resultados, key=lambda x: x[1], reverse=True)
-    
     return resultados_ordenados
+
 
 # Função principal para processar o PDF e comparar com a base de dados
 def processar_pdf(caminho_pdf: str, cursor, conn):
@@ -68,14 +77,22 @@ def processar_pdf(caminho_pdf: str, cursor, conn):
 
 # Executar o pipeline completo
 def main():
-    # Caminho do PDF a ser analisado
-    caminho_pdf = "ementa_exemplo.pdf"
-    # Conectar ao banco de dados
-    conn, cursor = conectar_bd()
-    # Processar o PDF e comparar com a base de dados
-    processar_pdf(caminho_pdf, cursor, conn)
-    # Fechar a conexão com o banco de dados
-    conn.close()
+    # Informações de conexão (fornecidas pelo seu colega)
+    host = "localhost"  # ou o IP do servidor de banco de dados
+    usuario = "seu_usuario"
+    senha = "sua_senha"
+    db_name = "nome_do_banco_de_dados"
+    
+    # Conectar ao banco de dados MySQL
+    conn, cursor = conectar_bd_mysql(host, usuario, senha, db_name)
+    
+    if conn is not None:
+        # Caminho do PDF a ser analisado
+        caminho_pdf = "ementa_exemplo.pdf"
+        # Processar o PDF e comparar com a base de dados
+        processar_pdf(caminho_pdf, cursor, conn)
+        # Fechar a conexão com o banco de dados
+        conn.close()
 
 # Executa o programa principal
 if __name__ == "__main__":
