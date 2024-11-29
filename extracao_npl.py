@@ -78,10 +78,10 @@ def processar_pdf(caminho_pdf: str, cursor, conn):
 # Executar o pipeline completo
 def main():
     # Informações de conexão (fornecidas pelo seu colega)
-    host = "localhost"  # ou o IP do servidor de banco de dados
-    usuario = "seu_usuario"
-    senha = "sua_senha"
-    db_name = "nome_do_banco_de_dados"
+    host = "127.0.01"  # ou o IP do servidor de banco de dados
+    usuario = "root"
+    senha = ""
+    db_name = "bd_projeto"
     
     # Conectar ao banco de dados MySQL
     conn, cursor = conectar_bd_mysql(host, usuario, senha, db_name)
