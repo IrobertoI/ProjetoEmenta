@@ -1,0 +1,17 @@
+INSTALAÇÕES NO AMBIENTE VIRTUAL 
+
+
+pip install mysql-connector-python
+pip install rapidfuzz
+pip install fuzzywuzzy
+pip install pymupdf
+ python manage.py migrate 
+python manage.py createsuperuser
+
+pip install filesystemstorage 
+pip install django-cors-headers   
+pip install mysqlclient
+pip install django
+python -m venv venv
+.venv\Scripts\activate
+ 
