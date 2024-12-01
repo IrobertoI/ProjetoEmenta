@@ -141,6 +141,16 @@ button#theme-toggle.dark-mode {
 }
 
 
+.footer-text {
+    position: fixed;
+    bottom: 20px; 
+    right: 10px; 
+    font-size: 16px; 
+    color: #333; 
+    z-index: 10; 
+}
+
+
 #response {
     margin-top: 20px;
     padding: 20px;
@@ -190,4 +200,42 @@ body.dark-mode #response p strong {
 
 #response p.success {
     color: green;
+}
+
+.disciplinas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.result-card {
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+.result-card p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+body.dark-mode .result-card {
+    background-color: #444;
+    border-color: #666;
+    color: #f5f5f5;
+}
+
+.result-card p strong {
+    color: #000;
+}
+
+body.dark-mode .result-card p strong {
+    color: #fff;
 }

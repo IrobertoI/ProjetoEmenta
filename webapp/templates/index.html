@@ -5,8 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Faculdade</title>
+    <title>UNIALFA | FADISP</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'imagens/image.png' %}" type="image/x-icon">
 </head>
 <body>
 
@@ -27,17 +28,26 @@
         </h2>
     </div>
 
+    <div class="footer-text">
+        V.0.1
+    </div>
+
     <main>
         <section class="upload-pdf">
-            <h2>Insira aqui o sua ementa para aproveitamento</h2>
+            <h2>Insira aqui sua ementa para aproveitamento</h2>
             <form id="uploadForm" enctype="multipart/form-data">
-                <input type="file" id="fileInput" name="file" accept="application/pdf">
+                <!-- Permitir a seleção de arquivos individuais ou uma pasta com múltiplos PDFs -->
+                <label for="fileInput">Selecione aqui o PDF:</label>
+                <input type="file" id="fileInput" name="files[]" accept="application/pdf" multiple> <br>
+                <br>
+                <br>
                 <button type="submit">Enviar</button>
             </form>
             <div id="response"></div>
+            <div id="resultados"></div>
         </section>
     </main>
-
+    
     <script src="{% static 'javascript/script.js' %}"></script>
 </body>
 </html>

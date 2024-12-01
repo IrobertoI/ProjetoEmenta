@@ -7,23 +7,42 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     formData.append('file', fileInput.files[0]);  // Adiciona o arquivo selecionado ao FormData
 
     // Envia o arquivo via POST usando fetch
-    fetch('http://localhost:5000/upload', {  // URL do backend
+    fetch('http://127.0.0.1:8000/upload/', {  // URL do backend
         method: 'POST',
         body: formData,
     })
     .then(response => response.json())  // A resposta esperada é um JSON
     .then(data => {
-        // Exibir a resposta do backend
-        document.getElementById('response').innerHTML = `<p>Arquivo enviado com sucesso!</p>`;
-        // Exibir as informações de aproveitamento
-        const period = data.periodo;
-        const aproveitamento = data.aproveitamento;
-
-        let output = `<h3>Resultados do Aproveitamento:</h3>`;
-        output += `<p>Período: ${period}</p>`;
-        output += `<p>Aproveitamento: ${aproveitamento}%</p>`;
-
-        document.getElementById('resultados').innerHTML = output;
+        if (data.status === 'success') {
+            // Exibir a mensagem de sucesso
+            document.getElementById('response').innerHTML = `<p>${data.mensagem}</p>`;
+            
+            // Exibir as disciplinas com similaridade acima de 70
+            const resultados = data.resultados.filter(resultado => resultado.similaridade > 7);  // Filtra apenas maior que 70%
+            if (resultados.length > 0) {
+                let output = `<h3>Resultados:</h3><ul>`;
+                resultados.forEach(resultado => {
+                    
+                    
+                    let similaridade = resultado.similaridade;
+                    if (similaridade < 10) {
+                    similaridade *= 10;  // Ajuste para valores abaixo de 10, se necessário.
+                }
+                    output += `<li>
+                        <strong>Disciplina:</strong> ${resultado.nome_disciplina}<br>
+                        <strong>Similaridade:</strong> ${similaridade}%  <!-- Exibe como porcentagem -->
+                    </li>`;
+                });
+                
+                output += `</ul>`;
+                document.getElementById('resultados').innerHTML = output;
+            } else {
+                document.getElementById('resultados').innerHTML = `<p>Nenhuma disciplina com similaridade acima de 70%.</p>`;
+            }
+        } else {
+            // Caso ocorra um erro
+            document.getElementById('response').innerHTML = `<p>Erro: ${data.message}</p>`;
+        }
     })
     .catch(error => {
         // Caso ocorra algum erro
