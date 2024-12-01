@@ -55,6 +55,39 @@ div matricula  {
     
 }
 
+
+.resultado-caixa {
+    background-color: #f4f4f4; 
+    border: 1px solid #ddd;  
+    padding: 10px 8px 8px 8px;         
+    margin-bottom: 13px;     
+    border-radius: 8px;      
+     
+}
+
+body.dark-mode .resultado-caixa {
+    background-color: #333; 
+    border: 1px solid black;  
+    padding: 10px 8px 8px 8px;         
+    margin-bottom: 13px;     
+    border-radius: 8px;      
+     
+}
+
+.resultado-caixa h4 {
+    margin-top: 0;             
+    margin-bottom: 5px;        
+    color: #333;               
+    font-size: 16px;           
+}
+
+
+.resultado-caixa p {
+    margin: 0;                
+    font-size: 14px;          
+    line-height: 2;          
+}
+
 .caixaTexto {
 
     justify-content: center;
@@ -128,7 +161,7 @@ button#theme-toggle.dark-mode {
     background-color: #333;
     color: #f5f5f5;
 }
-.footer-text.dark-mode {
+body.dark-mode .footer-text {
     position: fixed;
     bottom: 20px; 
     right: 10px; 
@@ -160,24 +193,15 @@ button#theme-toggle.dark-mode {
 }
 
 
-
-#response {
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f4f4f4;
-    border: 1px solid #ddd;
-}
-
 #response h3 {
     font-size: 1.5em;
-    color: #333;
+    color: green;
 }
 
 #response p {
     font-size: 1.1em;
     line-height: 1.6;
-    color: #555;
+    color: green;
     margin-bottom: 10px;
 }
 
@@ -187,12 +211,12 @@ button#theme-toggle.dark-mode {
 
 body.dark-mode #response {
     background-color: #333;
-    color: #f9f9f9;
+    color: green;
     border-color: #444;
 }
 
 body.dark-mode #response p {
-    color: #ccc;
+    color: green;
 }
 
 body.dark-mode #response p strong {
