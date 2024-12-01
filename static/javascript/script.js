@@ -29,8 +29,11 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
                     similaridade *= 10;  // Ajuste para valores abaixo de 10, se necessário.
                 }
                     output += `<li>
+                        <br>
                         <strong>Disciplina:</strong> ${resultado.nome_disciplina}<br>
-                        <strong>Similaridade:</strong> ${similaridade}%  <!-- Exibe como porcentagem -->
+                        <strong>Ementa:</strong> ${resultado.ementa}<br>
+                        <strong>Similaridade:</strong> ${similaridade}%<br>
+                        <br>  <!-- Exibe como porcentagem -->
                     </li>`;
                 });
                 

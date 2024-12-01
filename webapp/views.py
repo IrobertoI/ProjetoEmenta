@@ -29,9 +29,13 @@ def comparar_disciplina(texto_disciplina: str, cursor):
     cursor.execute("SELECT nome_disciplina, ementa FROM disciplinas")
     disciplinas_db = cursor.fetchall()
     resultados = []
-    for id_disciplina, descricao_banco in disciplinas_db:
-        similaridade = fuzz.ratio(texto_disciplina, descricao_banco)
-        resultados.append({"id_disciplina": id_disciplina, "nome_disciplina": descricao_banco, "similaridade": similaridade})
+    for nome_disciplina, ementa in disciplinas_db:
+        similaridade = fuzz.ratio(texto_disciplina, ementa)
+        resultados.append({
+        "nome_disciplina": nome_disciplina,
+        "ementa": ementa,  
+        "similaridade": similaridade
+    })
 
     # Ordena por similaridade de forma decrescente
     resultados_ordenados = sorted(resultados, key=lambda x: x['similaridade'], reverse=True)
