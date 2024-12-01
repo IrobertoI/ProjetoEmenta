@@ -25,7 +25,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
                     
                     
                     let similaridade = resultado.similaridade;
-                    if (similaridade < 10) {
+                    if (similaridade <= 10) {
                     similaridade *= 10;  // Ajuste para valores abaixo de 10, se necessário.
                 }
                     output += `<li>
