@@ -20,7 +20,9 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
             // Exibir as disciplinas com similaridade acima de 70
             const resultados = data.resultados.filter(resultado => resultado.similaridade_media > 70);  // Filtra apenas maior que 70%
             if (resultados.length > 0) {
-                let output = `<h3>Resultados:</h3><ul>`;
+                let output = `<h3>Resultados:</h3>
+                        <br>    
+                        <ul>`;
                 resultados.forEach(resultado => {
                     let similaridade = resultado.similaridade_media;  // A similaridade já está em porcentagem
                     output += `<div class="resultado-caixa">
