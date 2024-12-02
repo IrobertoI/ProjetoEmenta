@@ -1,3 +1,4 @@
+import os
 import re
 import fitz  # PyMuPDF
 import unicodedata
@@ -49,7 +50,7 @@ def save_to_txt(disciplinas, output_file):
     """
     Salva as informações extraídas de todas as disciplinas em um arquivo TXT.
     """
-    with open(output_file, 'w', encoding='utf-8') as file:
+    with open(output_file, 'a', encoding='utf-8') as file:  # Mudar para modo 'a' para adicionar os dados de múltiplos PDFs
         for data in disciplinas:
             file.write(f"Disciplina: {data['Disciplina']}\n")
             file.write(f"Ementa: {data['Ementa']}\n")
@@ -64,17 +65,32 @@ def save_to_txt(disciplinas, output_file):
             
             file.write("-" * 50 + "\n")
 
+def process_multiple_pdfs(pdf_folder, output_file):
+    """
+    Processa todos os PDFs de uma pasta e salva as informações extraídas em um arquivo de saída.
+    """
+    try:
+        # Iterar sobre todos os arquivos PDF na pasta
+        for pdf_filename in os.listdir(pdf_folder):
+            if pdf_filename.endswith('.pdf'):
+                pdf_path = os.path.join(pdf_folder, pdf_filename)
+                print(f"Processando {pdf_filename}...")
+
+                # Extrair dados do PDF
+                disciplinas = extract_pdf_data(pdf_path)
+                save_to_txt(disciplinas, output_file)
+                print(f"Dados do arquivo {pdf_filename} salvos com sucesso!")
+
+        print(f"Todos os dados salvos em: {output_file}")
+
+    except Exception as e:
+        print(f"Erro ao processar os arquivos PDF: {e}")
+
 def main():
-    pdf_path = input("Digite o caminho do arquivo PDF: ")
+    pdf_folder = input("Digite o caminho da pasta com os arquivos PDF: ")
     output_file = "dados_extraidos.txt"
 
-    try:
-        print("Processando PDF...")
-        disciplinas = extract_pdf_data(pdf_path)
-        save_to_txt(disciplinas, output_file)
-        print(f"Dados salvos em: {output_file}")
-    except Exception as e:
-        print(f"Erro ao processar o PDF: {e}")
+    process_multiple_pdfs(pdf_folder, output_file)
 
 if __name__ == "__main__":
     main()
