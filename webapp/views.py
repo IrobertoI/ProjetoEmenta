@@ -1,11 +1,13 @@
-from django.shortcuts import render
+import mysql.connector
+import spacy
+from fuzzywuzzy import fuzz
+from django.shortcuts import render 
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
-
-import mysql.connector
-from fuzzywuzzy import fuzz
 from . import extracao_npl
 
+# Carregar o modelo de linguagem em português do spaCy
+nlp = spacy.load('pt_core_news_sm')
 
 # Função para conectar ao banco de dados MySQL
 def conectar_bd_mysql():
@@ -24,21 +26,49 @@ def conectar_bd_mysql():
         print(f"Erro ao conectar ao MySQL: {e}")
         return None, None
 
+# Função para tokenizar e remover stopwords usando spaCy
+def preprocessar_texto(texto):
+    # Usar o spaCy para processar o texto
+    doc = nlp(texto.lower())
+    
+    # Filtra as palavras (tokens) removendo stopwords e pontuação
+    tokens_filtrados = [token.text for token in doc if not token.is_stop and not token.is_punct and token.is_alpha]
+    
+    return " ".join(tokens_filtrados)
+
 # Função para comparar as disciplinas no banco de dados
 def comparar_disciplina(texto_disciplina: str, cursor):
     cursor.execute("SELECT nome_disciplina, ementa FROM disciplinas")
     disciplinas_db = cursor.fetchall()
+    
+    # Lista para armazenar os resultados
     resultados = []
+    
+    # Pré-processar o texto extraído e as descrições do banco de dados
+    texto_disciplina_processado = preprocessar_texto(texto_disciplina)
+    
     for nome_disciplina, ementa in disciplinas_db:
-        similaridade = fuzz.ratio(texto_disciplina, ementa)
-        resultados.append({
-        "nome_disciplina": nome_disciplina,
-        "ementa": ementa,  
-        "similaridade": similaridade
-    })
+        # Pré-processa o nome da disciplina e a ementa
+        nome_disciplina_processado = preprocessar_texto(nome_disciplina)
+        ementa_processada = preprocessar_texto(ementa)
+        
+        # Usando partial_ratio para comparar e ignorar variações pequenas no texto
+        similaridade_nome = fuzz.partial_ratio(texto_disciplina_processado, nome_disciplina_processado)
+        similaridade_ementa = fuzz.partial_ratio(texto_disciplina_processado, ementa_processada)
+
+        # A média das similaridades nome e ementa
+        similaridade_media = (similaridade_nome + similaridade_ementa) / 2
+        
+        # Se a similaridade for maior que 70%, adicionar ao resultado
+        if similaridade_media > 0.5:
+            resultados.append({
+                "nome_disciplina": nome_disciplina,
+                "ementa": ementa,  
+                "similaridade_media": similaridade_media
+            })
 
     # Ordena por similaridade de forma decrescente
-    resultados_ordenados = sorted(resultados, key=lambda x: x['similaridade'], reverse=True)
+    resultados_ordenados = sorted(resultados, key=lambda x: x['similaridade_media'], reverse=True)
     return resultados_ordenados
 
 def index(request):

@@ -1,5 +1,15 @@
 import re
 import fitz  # PyMuPDF
+import unicodedata
+
+def normalize_text(text):
+    """
+    Normaliza o texto para garantir consistência na comparação (remoção de acentos, espaços extras, etc).
+    """
+    text = unicodedata.normalize('NFKD', text)  # Remover acentos
+    text = text.lower()  # Colocar tudo em minúsculas
+    text = re.sub(r'\s+', ' ', text).strip()  # Remover espaços extras
+    return text
 
 def extract_pdf_data(pdf_path):
     """
@@ -17,11 +27,11 @@ def extract_pdf_data(pdf_path):
 
     disciplinas = []
     for match in re.finditer(disciplina_pattern, text):
-        disciplina = match.group(1).strip()  # Nome da disciplina
+        disciplina = normalize_text(match.group(1).strip())  # Nome da disciplina normalizado
 
         # Buscar a ementa para cada disciplina encontrada
         ementa_match = re.search(ementa_pattern, text[match.end():], re.DOTALL)
-        ementa = ementa_match.group(1).strip() if ementa_match else "Ementa não encontrada"
+        ementa = normalize_text(ementa_match.group(1).strip() if ementa_match else "Ementa não encontrada")
 
         # Buscar créditos para cada disciplina
         creditos_match = re.search(creditos_pattern, text[match.end():], re.IGNORECASE)

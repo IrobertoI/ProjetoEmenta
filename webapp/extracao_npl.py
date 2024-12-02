@@ -1,8 +1,10 @@
 import json
 import fitz  # PyMuPDF para extração de texto do PDF
-from fuzzywuzzy import fuzz  # Biblioteca para comparação de similaridade de strings
+from sentence_transformers import SentenceTransformer  # Para gerar embeddings
+from sklearn.metrics.pairwise import cosine_similarity  # Para calcular similaridade
 import mysql.connector  # Biblioteca para conexão com o MySQL
 from django.http import JsonResponse
+import re
 
 # Função para conectar ao banco de dados MySQL
 def conectar_bd_mysql():
@@ -28,15 +30,46 @@ def extrair_texto_pdf(caminho_pdf: str) -> str:
             texto_completo += pagina.get_text()
     return texto_completo
 
-# Função para comparar o texto extraído com o banco de dados
+# Função para pré-processar o texto (limpeza)
+def preprocessar_texto(texto: str) -> str:
+    # Remover caracteres especiais, números e normalizar o texto
+    texto = re.sub(r'\s+', ' ', texto)  # Substituir múltiplos espaços por um único
+    texto = texto.strip().lower()  # Remover espaços no início/fim e converter para minúsculas
+    texto = re.sub(r'[^a-zA-Zá-úÁ-Ú0-9\s]', '', texto)  # Remover caracteres não alfanuméricos (exceto acentuação)
+    return texto
+
+# Função para gerar embeddings de textos
+def gerar_embeddings(textos, modelo):
+    return modelo.encode(textos)
+
+# Função para comparar o texto extraído com o banco de dados (somente ementa)
 def comparar_disciplina(texto_disciplina: str, cursor):
-    # Alterando para consultar a tabela disciplinas
-    cursor.execute("SELECT id_disciplina, descricao FROM disciplinas")
+    # Alterando para consultar a tabela disciplinas com o campo ementa
+    cursor.execute("SELECT id_disciplina, ementa FROM disciplinas")
     disciplinas_db = cursor.fetchall()
+    
+    # Lista de IDs e ementas do banco de dados
+    ids_banco = [id_disciplina for id_disciplina, _ in disciplinas_db]
+    ementas_banco = [ementa for _, ementa in disciplinas_db]
+    
+    # Carregar o modelo de embeddings (BERT)
+    modelo = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+    
+    # Gerar embeddings para o texto extraído e as ementas do banco
+    texto_disciplina_processado = preprocessar_texto(texto_disciplina)
+    embedding_pdf = gerar_embeddings([texto_disciplina_processado], modelo)[0]
+    embeddings_banco = gerar_embeddings(ementas_banco, modelo)
+    
+    # Calcular similaridade de cosseno
     resultados = []
-    for id_disciplina, descricao_banco in disciplinas_db:
-        similaridade = fuzz.ratio(texto_disciplina, descricao_banco)
-        resultados.append({"id_disciplina": id_disciplina, "similaridade": similaridade})
+    for id_disciplina, embedding_banco in zip(ids_banco, embeddings_banco):
+        similaridade = cosine_similarity([embedding_pdf], [embedding_banco])[0][0]
+        
+        # Adicionar apenas resultados com similaridade maior que 80%
+        if similaridade > 0.7:
+            resultados.append({"id_disciplina": id_disciplina, "similaridade": similaridade})
+    
+    # Ordenar os resultados pela maior similaridade
     resultados_ordenados = sorted(resultados, key=lambda x: x["similaridade"], reverse=True)
     return resultados_ordenados
 

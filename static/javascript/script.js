@@ -18,24 +18,17 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
             document.getElementById('response').innerHTML = `<p>${data.mensagem}</p>`;
             
             // Exibir as disciplinas com similaridade acima de 70
-            const resultados = data.resultados.filter(resultado => resultado.similaridade > 7);  // Filtra apenas maior que 70%
+            const resultados = data.resultados.filter(resultado => resultado.similaridade_media > 70);  // Filtra apenas maior que 70%
             if (resultados.length > 0) {
-                let output = `<h3>Resultados:</h3><ul>
-                                <br>`;
+                let output = `<h3>Resultados:</h3><ul>`;
                 resultados.forEach(resultado => {
-                    
-                    
-                    let similaridade = resultado.similaridade;
-                    if (similaridade <= 10) {
-                    similaridade *= 10;  // Ajuste para valores abaixo de 10, se necessário.
-                }
+                    let similaridade = resultado.similaridade_media;  // A similaridade já está em porcentagem
                     output += `<div class="resultado-caixa">
                         <strong>Disciplina:</strong> ${resultado.nome_disciplina}<br>
                         <br>
                         <strong>Ementa:</strong> ${resultado.ementa}<br>
                         <br>
                         <strong>Similaridade:</strong> ${similaridade}%<br>
-                          <!-- Exibe como porcentagem -->
                     </div>`;
                 });
                 
@@ -64,5 +57,3 @@ function toggleDarkMode() {
     document.querySelector('header').classList.toggle('dark-mode');
     document.getElementById('theme-toggle').classList.toggle('dark-mode');
 }
-
-
