@@ -24,5 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('upload/', views.upload_file, name='upload_file'),
-    
+    path('stream-results/', views.upload_file, name='stream_results'),
 ]

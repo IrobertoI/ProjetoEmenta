@@ -1,0 +1,4 @@
+python -m spacy download pt_core_news_sm
+python manage.py createsuperuser
+python manage.py migrate
+pip install torch torchvision torchaudio

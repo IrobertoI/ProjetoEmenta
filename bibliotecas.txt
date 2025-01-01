@@ -1,22 +1,13 @@
-INSTALAÇÕES NO AMBIENTE VIRTUAL 
 
-Antes de rodar a venv verificar em qual pasta esta ''comando ls''
-python -m venv venv
-.venv\Scripts\activate
-
-pip install mysql-connector-python
-pip install rapidfuzz
-pip install fuzzywuzzy
-pip install pymupdf
-python manage.py migrate 
-python manage.py createsuperuser
-pip install filesystemstorage 
-pip install django-cors-headers   
-pip install mysqlclient
-pip install django
-pip install spacy
-python -m spacy download pt_core_news_sm
-pip install numpy
-pip install scikit-learn
-pip install torch torchvision torchaudio
-pip install sentence-transformers 
+mysql-connector-python
+rapidfuzz
+fuzzywuzzy
+pymupdf
+django-cors-headers   
+mysqlclient
+django
+spacy
+numpy
+scikit-learn
+sentence-transformers 
+python-Levenshtein

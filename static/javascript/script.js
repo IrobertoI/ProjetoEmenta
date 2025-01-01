@@ -9,12 +9,12 @@ function toggleLoading(show) {
 }
 
 // Função para enviar os arquivos para o backend
-document.getElementById('uploadForm').addEventListener('submit', function(event) {
+document.getElementById('uploadForm').addEventListener('submit', function (event) {
     event.preventDefault(); // Prevenir o envio padrão do formulário
 
     const formData = new FormData(); // Cria um objeto FormData
     const fileInput = document.getElementById('fileInput');
-    
+
     // Adiciona todos os arquivos selecionados
     for (let i = 0; i < fileInput.files.length; i++) {
         formData.append('files', fileInput.files[i]); // Adiciona cada arquivo ao FormData
@@ -24,79 +24,64 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     toggleLoading(true);
 
     // Envia os arquivos via POST usando fetch
-    fetch('http://127.0.0.1:8000/upload/', { // URL do backend
+    fetch('http://127.0.0.1:8000/upload/', {
         method: 'POST',
         body: formData,
     })
-    .then(response => response.json()) // A resposta esperada é um JSON
-    .then(data => {
-        toggleLoading(false); // Oculta o spinner após receber a resposta
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); // Transforma a resposta em JSON
+        })
+        .then(data => {
+            toggleLoading(false); // Oculta o spinner ao finalizar
 
-        // Verifique o que foi retornado (inspecione a resposta completa)
-        console.log(data); // Adicionando o log para inspecionar a resposta
+            const resultsElement = document.getElementById('resultados');
+            resultsElement.innerHTML = ''; // Limpa os resultados anteriores
 
-        if (data.status === 'success') {
-            // Exibir a mensagem de sucesso
-            document.getElementById('response').innerHTML = `<p>${data.mensagem}</p>`;
+            if (data.status === 'success' && Array.isArray(data.resultados) && data.resultados.length > 0) {
+                // Itera sobre os arquivos no JSON
+                data.resultados.forEach(arquivo => {
+                    let output = `<strong>Resultados para o arquivo:</strong>
+                    <br><br><strong>${arquivo.arquivo}</strong><br><br><ul>`;
+                    
+                    let hasValidResults = false; // Flag para verificar se há resultados válidos
 
-            // Inicia a variável de resultados gerais
-            let output = "";
+                    // Verifica se há resultados e itera sobre eles
+                    if (Array.isArray(arquivo.resultados) && arquivo.resultados.length > 0) {
+                        arquivo.resultados.forEach(resultado => {
+                            if (resultado.similaridade_media > 70) {
+                                hasValidResults = true; // Se algum resultado tiver mais de 70% de similaridade, marca como válido
+                            }
+                            output += `
+                                <li class="resultado-caixa">
+                                    <strong>Disciplina:</strong> ${resultado.nome_disciplina}<br><br>
+                                    <strong>Ementa:</strong> ${resultado.ementa}<br><br>
+                                    <strong>Carga Horária:</strong> ${resultado.carga_horaria}<br><br>
+                                    <strong>Similaridade:</strong> ${resultado.similaridade_media}%<br>
+                                </li>`;
+                        });
+                    }
 
-            // Percorrer os arquivos e seus resultados
-            data.resultados.forEach(arquivo => {
-                // Adiciona o nome do arquivo
-                output += `<strong>Resultados para o arquivo:</strong>
-            <br>
-            <br>
-            <strong>${arquivo.arquivo}</strong>
-            <br>
-            <br>`;
+                    // Se não houver resultados com mais de 70% de similaridade, exibe a mensagem
+                    if (!hasValidResults) {
+                        output += '<li class="resultado-caixa">Nenhuma matéria aproveitada neste arquivo.</li>';
+                    }
 
-                // Filtra as disciplinas com similaridade acima de 70%
-                const resultados = arquivo.resultados.filter(resultado => resultado.similaridade_media > 70);
-
-                // Se houver resultados, exibe-os
-                if (resultados.length > 0) {
-                    output += `<ul>`;
-                    resultados.forEach(resultado => {
-                        let similaridade = resultado.similaridade_media; // A similaridade já está em porcentagem
-                        output += `
-                        <li class="resultado-caixa">
-                            <strong>Disciplina:</strong> ${resultado.nome_disciplina}<br>
-                            <br>
-                            <strong>Ementa:</strong> ${resultado.ementa}<br>
-                            <br>
-                            <strong>Carga Horária:</strong> ${resultado.carga_horaria}<br>
-                            <br>
-                            <strong>Similaridade:</strong> ${similaridade}%<br>
-                        </li>`;
-                    });
-                    output += `</ul>`;
-                } else {
-                    output += `<li class="resultado-caixa">
-                    <p>Nenhuma disciplina com similaridade acima de 70%.</p>
-                    </li>`;
-                }
-                output += `<br>
-                <hr>
-                
-                <br>
-                <br>`;
-            });
-
-            // Coloca os resultados no elemento da página
-            document.getElementById('resultados').innerHTML = output;
-
-        } else {
-            // Caso ocorra um erro
-            document.getElementById('response').innerHTML = `<p>Erro: ${data.message}</p>`;
-        }
-    })
-    .catch(error => {
-        toggleLoading(false); // Oculta o spinner caso ocorra erro
-        console.error('Erro ao enviar arquivo:', error);
-        document.getElementById('response').innerHTML = `<p>Erro ao enviar o arquivo.</p>`;
-    });
+                    output += '</ul>';
+                    resultsElement.innerHTML += output; // Adiciona os resultados ao HTML
+                });
+            } else {
+                // Caso não haja resultados, exibe mensagem
+                resultsElement.innerHTML = '<li class="resultado-caixa">Nenhuma matéria foi aproveitada neste arquivo.</li>';
+            }
+        })
+        .catch(error => {
+            toggleLoading(false); // Oculta o spinner caso ocorra erro
+            console.error('Erro ao enviar arquivo:', error);
+            document.getElementById('response').innerHTML = `<p>Erro ao enviar o arquivo: ${error.message}</p>`;
+        });
 });
 
 // Função para alternar entre tema claro e escuro
